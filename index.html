@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư Giáng Sinh 🎄</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Tuyết rơi */
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .snowflake {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Container chính */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 20;
+            transition: opacity 0.5s ease;
+        }
+
+        .container.letter-open {
+            opacity: 0.7;
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: white;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 4px 8px rgba(0,0,0,0.3), 0 0 20px #fff; }
+            to { text-shadow: 0 4px 8px rgba(0,0,0,0.5), 0 0 30px #fff, 0 0 40px #ff6b6b; }
+        }
+
+        /* Phong bì thư */
+        .envelope-container {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .envelope {
+            width: clamp(250px, 40vw, 400px);
+            height: clamp(160px, 25vw, 250px);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .envelope.closed {
+            transform: rotateY(0deg);
+        }
+
+        .envelope.opened {
+            transform: rotateX(-20deg) rotateY(10deg) scale(1.05);
+        }
+
+        .envelope-front, .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+            border-radius: 12px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.3),
+                inset 0 2px 0 rgba(255,255,255,0.2),
+                inset 0 -2px 10px rgba(0,0,0,0.1);
+            backface-visibility: hidden;
+        }
+
+        .envelope-back {
+            background: linear-gradient(145deg, #c44569, #ee5a52);
+            transform: rotateY(180deg);
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 55%;
+            background: linear-gradient(145deg, #ff9ff3, #f368e0);
+            clip-path: polygon(0% 0%, 100% 0%, 50% 55%);
+            transform-origin: top;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: inset 0 2px 0 rgba(255,255,255,0.3);
+        }
+
+        .envelope.opened .flap {
+            transform: rotateX(-140deg);
+        }
+
+        /* Nút mở thư */
+        .open-btn {
+            background: linear-gradient(145deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(78,205,196,0.4);
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .open-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(78,205,196,0.6);
+        }
+
+        /* THƯ POPUP VỪA PHẢI */
+        .letter {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.7) rotateY(15deg);
+            width: clamp(450px, 70vw, 700px);
+            max-height: 85vh;
+            background: linear-gradient(145deg, #f7d794, #f4c430);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-radius: 24px;
+            box-shadow: 
+                0 30px 80px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(255,255,255,0.3),
+                inset 0 2px 20px rgba(255,255,255,0.8),
+                inset 0 -2px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .letter.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+        }
+
+        .letter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .letter-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .letter-content {
+            padding: clamp(40px, 6vw, 60px);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            color: #2c3e50;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .letter-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            color: #e74c3c;
+            margin-bottom: 25px;
+            text-shadow: 0 4px 12px rgba(231,76,60,0.3);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-12px); }
+            60% { transform: translateY(-6px); }
+        }
+
+        .letter-text {
+            font-size: clamp(1.1rem, 3vw, 1.6rem);
+            font-weight: 500;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .letter-sign {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-style: italic;
+            color: #7f8c8d;
+            margin-top: auto;
+            opacity: 0;
+            animation: fadeInUp 1s 0.4s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-letter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.95);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            color: #e74c3c;
+            font-weight: bold;
+            z-index: 101;
+        }
+
+        .close-letter:hover {
+            transform: scale(1.15) rotate(90deg);
+            background: #fff;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title { margin-bottom: 1.5rem; }
+            .open-btn { padding: 14px 28px; font-size: 1.1rem; }
+            .letter { max-height: 90vh; }
+            .letter-content { padding: 30px 25px; }
+        }
+
+        @media (max-width: 480px) {
+            .letter { width: 95vw; margin: 0 2.5vw; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tuyết rơi -->
+    <div class="snow" id="snow"></div>
+
+    <div class="container" id="container">
+        <h1 class="title">🎄 Giáng Sinh Vui Vẻ 🎄</h1>
+        
+        <div class="envelope-container" id="envelopeContainer">
+            <div class="envelope closed" id="envelope">
+                <div class="envelope-front">
+                    <div class="flap"></div>
+                </div>
+                <div class="envelope-back"></div>
+            </div>
+        </div>
+
+        <button class="open-btn" id="openBtn">
+            ✨ Mở Thư ✨
+        </button>
+    </div>
+
+    <!-- OVERLAY ĐỤC TRONG SUỐT -->
+    <div class="letter-overlay" id="letterOverlay"></div>
+
+    <!-- THƯ POPUP VỪA PHẢI -->
+    <div class="letter" id="letter">
+        <button class="close-letter" id="closeLetter">×</button>
+        <div class="letter-content">
+            <div class="letter-title">🎁 Merry chrismast 🎁</div>
+            <div class="letter-text">
+                Tadarr! Chúc mừng giáng sinh bé iu. Vậy đây là mùa giáng sinh đầu tiên của mình nhỉ, anh thấy hơi tiếc vì hong có nhiều thời gian rảnh dể đi chụp ảnh cùng em làm kỉ niệm, thoi thì bé đợi anh năm sau nhaa. 
+                Anh biết đôi nào cũng có cãi vã hiểu lầm, nhưng anh hi vọng Mít sẽ nói cho anh nghe những ấm ức trong lòng của bé. Anh cũng xin lỗi vì đã có lúc căng thẳng, to tiếng làm em bé phải rưng rưng, nhưng cái ôm thật chặt của bé cũng chính là liều thuốc xoa dịu đi mọi căng thẳng của anh đấy ạ! Chỉ cần bé ôm anh thoi còn khó mở lời quá thì cứ để anh nhá. Mong em sẽ luôn tươi cười, hạnh phúc và luôn là em bé của anh ạ 
+            </div>
+            <div class="letter-sign">
+                - From Cuong with love -
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tạo tuyết rơi
+        function createSnowflakes() {
+            const snow = document.getElementById('snow');
+            const snowflakeCount = 100;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowflake.style.width = snowflake.style.height = (Math.random() * 5 + 2) + 'px';
+                snowflake.style.opacity = Math.random() * 0.5 + 0.3;
+                snow.appendChild(snowflake);
+                
+                snowflake.addEventListener('animationiteration', () => {
+                    snowflake.style.left = Math.random() * 100 + '%';
+                    snowflake.style.animationDelay = Math.random() * 5 + 's';
+                });
+            }
+        }
+
+        // Elements
+        const envelope = document.getElementById('envelope');
+        const openBtn = document.getElementById('openBtn');
+        const envelopeContainer = document.getElementById('envelopeContainer');
+        const container = document.getElementById('container');
+        const letter = document.getElementById('letter');
+        const letterOverlay = document.getElementById('letterOverlay');
+        const closeLetter = document.getElementById('closeLetter');
+
+        let isLetterOpen = false;
+
+        function openLetter() {
+            envelope.classList.remove('closed');
+            envelope.classList.add('opened');
+            container.classList.add('letter-open');
+            letterOverlay.classList.add('show');
+            letter.classList.add('show');
+            openBtn.textContent = '🔄 Đóng Thư';
+        }
+
+        function closeLetterFunc() {
+            envelope.classList.remove('opened');
+            envelope.classList.add('closed');
+            container.classList.remove('letter-open');
+            letterOverlay.classList.remove('show');
+            letter.classList.remove('show');
+            openBtn.textContent = '✨ Mở Thư ✨';
+        }
+
+        // Events
+        envelopeContainer.addEventListener('click', function(e) {
+            if (e.target === envelopeContainer && !isLetterOpen) {
+                openLetter();
+                isLetterOpen = true;
+            }
+        });
+
+        openBtn.addEventListener('click', function() {
+            if (!isLetterOpen) {
+                openLetter();
+                isLetterOpen = true;
+            } else {
+                closeLetterFunc();
+                isLetterOpen = false;
+            }
+        });
+
+        closeLetter.addEventListener('click', function() {
+            closeLetterFunc();
+            isLetterOpen = false;
+        });
+
+        // Overlay click
+        letterOverlay.addEventListener('click', function() {
+            closeLetterFunc();
+            isLetterOpen = false;
+        });
+
+        // ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isLetterOpen) {
+                closeLetterFunc();
+                isLetterOpen = false;
+            }
+        });
+
+        // Khởi tạo
+        createSnowflakes();
+
+        // Responsive handling
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 480 && isLetterOpen) {
+                letter.style.width = '95vw';
+            } else {
+                letter.style.width = '';
+            }
+        });
+    </script>
+</body>
+</html>
