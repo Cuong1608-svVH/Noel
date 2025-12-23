@@ -164,7 +164,8 @@
             left: 50%;
             transform: translate(-50%, -50%) scale(0.7) rotateY(15deg);
             width: clamp(450px, 70vw, 700px);
-            max-height: 85vh;
+            max-height: 90vh;
+            height: auto;
             background: linear-gradient(145deg, #f7d794, #f4c430);
             z-index: 100;
             opacity: 0;
@@ -206,7 +207,8 @@
 
         .letter-content {
             padding: clamp(40px, 6vw, 60px);
-            height: 100%;
+            height: auto;
+            max-height: calc(90vh - 80px);  
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -214,7 +216,19 @@
             color: #2c3e50;
             position: relative;
             overflow-y: auto;
+            scrollbar-width: thin;
         }
+        /* Chrome, Edge, Safari – làm thanh cuộn mảnh hơn cho đẹp */
+.letter-content::-webkit-scrollbar {
+    width: 6px;
+}
+.letter-content::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.05);
+}
+.letter-content::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.3);
+    border-radius: 4px;
+}
 
         .letter-title {
             font-family: 'Dancing Script', cursive;
@@ -232,7 +246,7 @@
         }
 
         .letter-text {
-            font-size: clamp(1.1rem, 3vw, 1.6rem);
+            font-size: clamp(1rem, 2.4vw, 1.3rem);
             font-weight: 500;
             line-height: 1.7;
             margin-bottom: 30px;
@@ -299,7 +313,7 @@
     <div class="snow" id="snow"></div>
 
     <div class="container" id="container">
-        <h1 class="title">🎄 Giáng Sinh Vui Vẻ 🎄</h1>
+        <h1 class="title">🎄Giáng Sinh Vui Vẻ🎄</h1>
         
         <div class="envelope-container" id="envelopeContainer">
             <div class="envelope closed" id="envelope">
@@ -322,10 +336,10 @@
     <div class="letter" id="letter">
         <button class="close-letter" id="closeLetter">×</button>
         <div class="letter-content">
-            <div class="letter-title">🎁 Merry chrismast 🎁</div>
+            <div class="letter-title">Merry chrismast</div>
             <div class="letter-text">
-                Tadarr! Chúc mừng giáng sinh bé iu. Vậy đây là mùa giáng sinh đầu tiên của mình nhỉ, anh thấy hơi tiếc vì hong có nhiều thời gian rảnh dể đi chụp ảnh cùng em làm kỉ niệm, thoi thì bé đợi anh năm sau nhaa. 
-                Anh biết đôi nào cũng có cãi vã hiểu lầm, nhưng anh hi vọng Mít sẽ nói cho anh nghe những ấm ức trong lòng của bé. Anh cũng xin lỗi vì đã có lúc căng thẳng, to tiếng làm em bé phải rưng rưng, nhưng cái ôm thật chặt của bé cũng chính là liều thuốc xoa dịu đi mọi căng thẳng của anh đấy ạ! Chỉ cần bé ôm anh thoi còn khó mở lời quá thì cứ để anh nhá. Mong em sẽ luôn tươi cười, hạnh phúc và luôn là em bé của anh ạ 
+                Tadarr! Chúc mừng giáng sinh bé iu. Vậy đây là mùa Noel đầu tiên của mình nhỉ, anh thấy hơi tiếc vì hong có nhiều thời gian rảnh để đi chụp ảnh cùng em làm kỉ niệm, thoi thì bé đợi anh năm sau nhaa. 
+                Anh biết đôi nào cũng có cãi vã hiểu lầm, nhưng anh hi vọng Mít sẽ nói cho anh nghe những ấm ức trong lòng của bé. Anh cũng xin lỗi vì đã có lúc căng thẳng, to tiếng làm em bé phải rưng rưng, nhưng cái ôm thật chặt của bé cũng chính là liều thuốc xoa dịu đi mọi căng thẳng của anh đấy ạ! Mong rằng khi ta bất đồng, thay vì lựa chọn im lặng và mong đợi đối phương tự hiểu thì chúng mình có thể thật lòng nói ra những điều đang để trong lòng. Chúc bé của anh luôn tươi cười và hạnh phúc nhé! Anh iu Mít (em bé) của anh nhiều lắm♥️♥️
             </div>
             <div class="letter-sign">
                 - From Cuong with love -
